@@ -1,21 +1,35 @@
-% writematrix(label1_ranges, "label1_ranges.txt")
-% writematrix(label2_ranges, "label2_ranges.txt")
-% writematrix(label3_ranges, "label3_ranges.txt")
-% writematrix(label4_ranges, "label4_ranges.txt")
+load('label4_ranges.txt')
+load('dishwasher_power.txt')
+writematrix(label4_ranges, "label4_ranges.txt")
 
-plot_similar_patterns(label1_ranges, dishwasher_power)
+plot_similar_patterns(label4_ranges, dishwasher_power);
 
 function plot_similar_patterns(ranges, dishwasher_power)
+    figure;
 
     for i = 1:(length(ranges) / 2)
         if ranges(2*i-1) == 0
             break
         end
-        plot(dishwasher_power(ranges(2*i-1):ranges(2*i)))
-        fprintf('%d, %d', ranges(2*i-1),ranges(2*i))
-        pause()
-        clc
-        % hold on
+
+        upper = ranges(2*i);
+        lower = ranges(2*i-1);
+
+        disp(['Plotting range ', num2str(lower), '-', num2str(upper)]);
+
+        plot(dishwasher_power(lower:upper), 'DisplayName', sprintf('Range %d-%d', lower, upper));
+        
+        pause();
+
+        % Mark the range on the plot using text
+        text(lower, dishwasher_power(lower), sprintf('Start %d', lower), 'VerticalAlignment', 'top', 'HorizontalAlignment', 'right');
+        text(upper, dishwasher_power(upper), sprintf('End %d', upper), 'VerticalAlignment', 'top', 'HorizontalAlignment', 'right');
     end
- 
+    
+    hold off;
+
+    xlabel('Time');
+    ylabel('Power Consumption');
+    title('Dishwasher Power Consumption');
+    legend('show');
 end
